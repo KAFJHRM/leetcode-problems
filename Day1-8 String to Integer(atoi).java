@@ -1,30 +1,45 @@
 class Solution {
-public:
-    int myAtoi(string s) {
+    public int myAtoi(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        
         int i = 0;
         int n = s.length();
         
         // 1. Discard leading whitespaces
-        while (i < n && s[i] == ' ') {
+        while (i < n && s.charAt(i) == ' ') {
             i++;
         }
         
-        // 2. Determine sign
+        // If the string was entirely whitespaces
+        if (i == n) {
+            return 0;
+        }
+        
+        // 2. Check for sign
         int sign = 1;
-        if (i < n && (s[i] == '+' || s[i] == '-')) {
-            sign = (s[i] == '-') ? -1 : 1;
+        if (s.charAt(i) == '+' || s.charAt(i) == '-') {
+            sign = (s.charAt(i) == '-') ? -1 : 1;
             i++;
         }
         
-        // 3. Convert digits and handle potential overflow
+        // 3. Read digits and handle overflow
         int res = 0;
-        while (i < n && isdigit(s[i])) {
-            int digit = s[i] - '0';
+        while (i < n) {
+            char curr = s.charAt(i);
             
-            // Check for overflow before multiplying by 10 and adding the digit
-            // INT_MAX is 2147483647 (ends in 7). INT_MIN is -2147483648 (ends in 8).
-            if (res > INT_MAX / 10 || (res == INT_MAX / 10 && digit > INT_MAX % 10)) {
-                return (sign == 1) ? INT_MAX : INT_MIN;
+            // Stop at the first non-digit character
+            if (curr < '0' || curr > '9') {
+                break;
+            }
+            
+            int digit = curr - '0';
+            
+            // Check for overflow before multiplying
+            // Integer.MAX_VALUE is 2147483647
+            if (res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && digit > Integer.MAX_VALUE % 10)) {
+                return (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
             }
             
             res = res * 10 + digit;
@@ -33,4 +48,4 @@ public:
         
         return res * sign;
     }
-};
+}

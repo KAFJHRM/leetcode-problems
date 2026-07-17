@@ -1,24 +1,22 @@
 class Solution {
-public:
-    bool isPalindrome(int x) {
-        // Edge cases:
-        // 1. Negative numbers are not palindromes (e.g., -121 reads as 121- from right to left)
-        // 2. If the last digit is 0, the first digit must also be 0 for it to be a palindrome.
-        //    Only 0 itself satisfies this.
+    public boolean isPalindrome(int x) {
+        // Special cases:
+        // As discussed above, when x < 0, x is not a palindrome.
+        // Also, if the last digit of the number is 0, for the number to be a palindrome,
+        // the first digit of the number also needs to be 0. Only 0 satisfies this property.
         if (x < 0 || (x % 10 == 0 && x != 0)) {
             return false;
         }
 
-        int reversedHalf = 0;
-        // Reverse only the second half of the number to prevent integer overflow
-        while (x > reversedHalf) {
-            reversedHalf = reversedHalf * 10 + x % 10;
+        int revertedNumber = 0;
+        while (x > revertedNumber) {
+            revertedNumber = revertedNumber * 10 + x % 10;
             x /= 10;
         }
 
-        // For even-length numbers (e.g., 1221), x == reversedHalf (12 == 12)
-        // For odd-length numbers (e.g., 12321), we can get rid of the middle digit by reversedHalf/10
-        // (x == 12, reversedHalf == 123 -> 123/10 = 12)
-        return x == reversedHalf || x == reversedHalf / 10;
+        // When the length is an odd number, we can get rid of the middle digit by revertedNumber/10
+        // For example, when input is 12321, at the end of the while loop we get x = 12, revertedNumber = 123,
+        // since the middle digit doesn't matter in palindrome (it will always equal to itself), we can simply get rid of it.
+        return x == revertedNumber || x == revertedNumber / 10;
     }
-};
+}
